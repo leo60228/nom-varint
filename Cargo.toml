@@ -9,4 +9,4 @@ homepage = "https://github.com/leo60228/nom-varint"
 repository = "https://github.com/leo60228/nom-varint"
 
 [dependencies]
-nom = "^4.1"
+nom = "5"
