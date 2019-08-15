@@ -2,6 +2,8 @@
 //!
 //! Parse varints (used by Minecraft, Celeste, and Protocol Buffers) using nom.
 
+#![no_std]
+
 use nom::bytes::complete::take;
 use nom::Err::*;
 use nom::Needed::Unknown;
