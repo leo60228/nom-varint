@@ -5,6 +5,7 @@
 #![no_std]
 
 use nom::bytes::complete::take;
+use nom::error::ParseError;
 use nom::Err::*;
 use nom::Needed::Unknown;
 
@@ -13,9 +14,12 @@ use nom::Needed::Unknown;
 /// # Examples
 ///
 /// ```
-/// assert_eq!(nom_varint::take_varint(&[0x0b]), Ok((&[] as &[u8], 0x0b)));
+/// assert_eq!(nom_varint::take_varint::<()>(&[0x0b]), Ok((&[] as &[u8], 0x0b)));
 /// ```
-pub fn take_varint(i: &[u8]) -> nom::IResult<&[u8], usize> {
+pub fn take_varint<'a, E>(i: &'a [u8]) -> nom::IResult<&'a [u8], usize, E>
+where
+    E: ParseError<&'a [u8]>,
+{
     let mut res: usize = 0;
     let mut count: usize = 0;
     let mut remainder = i;
@@ -40,7 +44,7 @@ mod test {
     #[test]
     fn parse_varint_simple() {
         assert_eq!(
-            super::take_varint(&[0x0b, 0x01, 0x02, 0x03]),
+            super::take_varint::<()>(&[0x0b, 0x01, 0x02, 0x03]),
             Ok((b"\x01\x02\x03" as &[u8], 11))
         );
     }
@@ -48,7 +52,7 @@ mod test {
     #[test]
     fn parse_varint_twobyte() {
         assert_eq!(
-            super::take_varint(&[0x84, 0x02, 0x04, 0x05, 0x06]),
+            super::take_varint::<()>(&[0x84, 0x02, 0x04, 0x05, 0x06]),
             Ok((b"\x04\x05\x06" as &[u8], 260))
         );
     }
