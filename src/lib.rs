@@ -4,8 +4,10 @@
 
 #![no_std]
 
+use core::convert::TryInto;
+use core::u32;
 use nom::bytes::complete::take;
-use nom::error::ParseError;
+use nom::error::{ErrorKind, ParseError};
 use nom::Err::*;
 use nom::Needed::Unknown;
 
@@ -31,7 +33,9 @@ where
             }
             Err(_) => return Err(Incomplete(Unknown)),
         };
-        res += ((byte as usize) & 127) << (count * 7);
+        res += ((byte as usize) & 127)
+            .checked_shl((count * 7).try_into().unwrap_or(u32::MAX))
+            .ok_or_else(|| Error(E::from_error_kind(remainder, ErrorKind::MapOpt)))?;
         count += 1;
         if (byte >> 7) == 0 {
             return Ok((remainder, res));
