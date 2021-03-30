@@ -1,6 +1,6 @@
 [package]
 name = "nom-varint"
-version = "0.3.1"
+version = "0.4.0"
 authors = ["leo60228 <iakornfeld@gmail.com>"]
 edition = "2018"
 description = "Parse varints (used by Celeste, Minecraft, and Protocol buffers) using nom."
@@ -9,4 +9,4 @@ homepage = "https://github.com/leo60228/nom-varint"
 repository = "https://github.com/leo60228/nom-varint"
 
 [dependencies]
-nom = { version = "5.0.0", default-features = false }
+nom = { version = "6.1.2", default-features = false }
